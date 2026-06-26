@@ -54,6 +54,12 @@ python3 apple_calendar_fast.py --from 2023-02-01 --days 28 --limit 5
 python3 apple_calendar_fast.py --from 2026-06-01 --days 30 --limit 5
 ```
 
+## Tested Environment
+
+Tested on a Mac mini (Apple M4, Mac16,10) running macOS 26.5.1 build 25F80.
+
+Other macOS versions may have different Calendar SQLite schemas. Please open an issue if it breaks on your setup.
+
 ## License
 
 MIT
