@@ -65,6 +65,11 @@ def main() -> None:
     WHERE ci.start_date BETWEEN ? AND ?
       AND IFNULL(ci.hidden, 0) = 0
       AND (? IS NULL OR cal.title LIKE '%' || ? || '%')
+      AND ci.ROWID NOT IN (
+        SELECT event_id
+        FROM OccurrenceCache
+        WHERE COALESCE(occurrence_start_date, occurrence_date) BETWEEN ? AND ?
+      )
     ORDER BY ci.start_date, ci.summary
     LIMIT ?
     """
@@ -77,7 +82,15 @@ def main() -> None:
         ).fetchall()
         rows += conn.execute(
             item_query,
-            (apple_seconds(start), apple_seconds(end), args.calendar, args.calendar, args.limit),
+            (
+                apple_seconds(start),
+                apple_seconds(end),
+                args.calendar,
+                args.calendar,
+                apple_seconds(start),
+                apple_seconds(end),
+                args.limit,
+            ),
         ).fetchall()
 
     printed = 0
